@@ -15,45 +15,8 @@ import com.example.training.utils.openPhoneCall
 
 
 class SecondActivity : ComponentActivity() {
-    override fun onStop() {
-        super.onStop()
-        Log.d("Lifecycle", "2onStop")
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("Lifecycle", "2onStart")
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("Lifecycle", "2onPause")
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("Lifecycle", "2onDestroy")
-
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        Log.d("Lifecycle", "2onRestart")
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("Lifecycle", "2onResume")
-
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("Lifecycle", "2onCreate")
         val intent = intent
         val inputFromMain = intent.getStringExtra("user_input")
         setContent {

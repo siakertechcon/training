@@ -25,45 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.training.ui.theme.TrainingTheme
 
 class MainActivity : ComponentActivity() {
-    override fun onStop() {
-        super.onStop()
-        Log.d("Lifecycle", "1onStop")
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("Lifecycle", "1onStart")
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("Lifecycle", "1onPause")
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("Lifecycle", "1onDestroy")
-
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        Log.d("Lifecycle", "1onRestart")
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("Lifecycle", "1onResume")
-
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("Lifecycle", "1onCreate")
         setContent {
             var text by remember { mutableStateOf("") }
             TrainingTheme {

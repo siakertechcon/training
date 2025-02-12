@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
-import com.example.training.ThirdActivity
 
 
 fun Intent.openPhoneCall(phoneNumber: String, context: Context){
@@ -41,18 +40,6 @@ fun Intent.shareViaSms(message: String?, context: Context) {
         context.startActivity(intent)
     } catch (e: Exception) {
         Toast.makeText(context, "Failed to open messaging app", Toast.LENGTH_LONG)
-            .show()
-    }
-}
-
-fun Intent.passDataTo3(input: String, context: Context){
-    val intent = Intent(context, ThirdActivity::class.java).apply {
-        putExtra("input", input)
-    }
-    try{
-        context.startActivity(intent)
-    } catch (e: ActivityNotFoundException){
-        Toast.makeText(context, "Failed to find activity", Toast.LENGTH_LONG)
             .show()
     }
 }
