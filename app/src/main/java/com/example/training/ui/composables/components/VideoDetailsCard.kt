@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil3.compose.AsyncImage
 import com.example.common_challenge.api.VideoDetails
 import com.example.training.vm.VideoViewModel
 
@@ -27,8 +28,8 @@ fun VideoDetailsCard(videoDetails: VideoDetails) {
                 vertical = 16.dp
             )
     ) {
+        AsyncImage(model="${videoDetails.thumbnailUrl}", contentDescription = null)
         Text(text="Title: ${videoDetails.title}")
-        Text(text="Thumbnail Url: ${videoDetails.thumbnailUrl}")
         Text(text="Duration: ${videoDetails.duration}")
         Text(text="Upload Time: ${videoDetails.uploadTime}")
         Text(text="Views: ${videoDetails.views}")
