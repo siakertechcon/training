@@ -1,5 +1,8 @@
 package com.example.common_challenge.api
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class VideoDetails(
     val id: Int,
     val title: String,
