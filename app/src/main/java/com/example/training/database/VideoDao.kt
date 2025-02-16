@@ -14,8 +14,8 @@ interface VideoDao {
     @Query("SELECT * FROM videoEntity WHERE id IN (:userIds)")
     fun loadAllByIds(userIds: IntArray): List<VideoEntity>
 
-    @Query("SELECT * FROM videoEntity WHERE title LIKE :title LIMIT 1")
-    fun findByTitle(title: String): VideoEntity
+    @Query("SELECT * FROM videoEntity WHERE id = :id LIMIT 1")
+    fun findById(id: Int): VideoEntity
 
     @Insert
     fun insertAll(vararg videos: VideoEntity)

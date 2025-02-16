@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.common_challenge.api.VideoDetails
 import com.example.training.ui.composables.components.VideoDetailsCard
 import com.example.training.vm.VideoViewModel
+import com.example.common_challenge.api.Result
 
 @Composable
 fun VideoDetailsScreen(
@@ -21,18 +22,32 @@ fun VideoDetailsScreen(
         videoId: Int?
 ) {
     val viewModel: VideoViewModel = hiltViewModel<VideoViewModel>()
-    val videoDetails = viewModel.videos.collectAsState()
-    Column(
-        modifier = Modifier.padding(16.dp)
-    ) {
-        Button(onClick = {navigateUp()}) {
-            Text(text="Back")
+    val uiState = viewModel.uiState.collectAsState().value
+    val videoDetails = uiState.result.data
+    when(uiState.result) {
+        is Result.Error -> {
+            Text(text="${uiState.result.message}")
         }
-        if(videoId != null) {
-            val videoDetail = videoDetails.value.find { video -> video.id == videoId }
-            if(videoDetail != null) {
-                VideoDetailsCard(videoDetail)
+        is Result.Loading -> {
+            Text(text="${uiState.result.message}")
+        }
+        is Result.Success -> {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Button(onClick = {navigateUp()}) {
+                    Text(text="Back")
+                }
+                if(videoId != null) {
+                    val videoDetail = videoDetails?.find { video -> video.id == videoId }
+                    if(videoDetail != null) {
+                        VideoDetailsCard(videoDetail)
+                    }
+                }
             }
+        }
+        else -> {
+            throw Exception("Uh oh. Something went wrong.")
         }
     }
 }

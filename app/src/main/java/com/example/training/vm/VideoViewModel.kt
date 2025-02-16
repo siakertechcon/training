@@ -1,6 +1,7 @@
 package com.example.training.vm
 
 import android.util.Log
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.ColumnInfo
@@ -26,6 +27,12 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.internal.ESCAPE_STRINGS
 import javax.inject.Inject
 
+
+data class VideoViewModelState(
+    var result: Result<List<VideoDetails>>,
+    var savedVideos: List<VideoEntity>
+)
+
 @HiltViewModel
 class VideoViewModel @Inject constructor(
     private val db: VideoDatabase,
@@ -33,22 +40,20 @@ class VideoViewModel @Inject constructor(
 ) : ViewModel() {
     //TODO: Fill out more
     private val videoDao = db.videoDao()
-    private val _videos = MutableStateFlow<List<VideoDetails>>(listOf())
-    val videos = _videos.asStateFlow()
-    private val _savedVideos = MutableStateFlow<List<VideoEntity>>(listOf())
-    val savedVideos = _savedVideos.asStateFlow()
-    init {
-        loadVideos()
-    }
+    private val _uiState = MutableStateFlow(VideoViewModelState(
+        Result.Loading<List<VideoDetails>>(),
+        listOf<VideoEntity>()
+    ))
+    val uiState = _uiState.asStateFlow()
+    init { loadVideos() }
     private fun loadVideos() {
         viewModelScope.launch(Dispatchers.IO) {
             videoRepo.getVideoDetails()
                 .collect { latest ->
-                    if(latest is Result.Success) {
-                        val data = latest.data
-                        if(data is List<VideoDetails>) {
-                            _videos.value += data
-                        }
+                    Log.d("VVM", latest.toString())
+//                    _uiState.value.result = latest
+                    _uiState.update { currentState ->
+                        currentState.copy(result = latest)
                     }
                 }
         }
@@ -62,13 +67,18 @@ class VideoViewModel @Inject constructor(
             videoDetails.description,
         )
         viewModelScope.launch(Dispatchers.IO) {
-            videoDao.insertAll(videoEntity)
+            if(videoDao.findById(videoDetails.id) == null) {
+                videoDao.insertAll(videoEntity)
+            }
         }
     }
     fun findAll() {
         viewModelScope.launch(Dispatchers.IO) {
             val videoEntities = videoDao.getAll()
-            _savedVideos.value += videoEntities
+            _uiState.value.savedVideos += videoEntities
+            _uiState.update { currentState ->
+                currentState.copy(savedVideos = _uiState.value.savedVideos + videoEntities)
+            }
         }
     }
 }

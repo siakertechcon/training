@@ -17,8 +17,9 @@ import com.example.training.vm.VideoViewModel
 @Composable
 fun SavedVideosScreen(navigateUp: () -> Boolean) {
     val viewModel: VideoViewModel = hiltViewModel<VideoViewModel>()
+    val uiState = viewModel.uiState.collectAsState().value
     viewModel.findAll()
-    val savedVideos = viewModel.savedVideos.collectAsState()
+    val savedVideos = uiState.savedVideos
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
@@ -26,7 +27,7 @@ fun SavedVideosScreen(navigateUp: () -> Boolean) {
             Text(text="Back")
         }
         LazyColumn {
-            items(savedVideos.value) { savedVideo ->
+            items(savedVideos) { savedVideo ->
                 SavedVideoCard(savedVideo)
             }
         }
