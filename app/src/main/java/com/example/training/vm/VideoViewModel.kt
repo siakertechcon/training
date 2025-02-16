@@ -75,7 +75,6 @@ class VideoViewModel @Inject constructor(
     fun findAll() {
         viewModelScope.launch(Dispatchers.IO) {
             val videoEntities = videoDao.getAll()
-            _uiState.value.savedVideos += videoEntities
             _uiState.update { currentState ->
                 currentState.copy(savedVideos = _uiState.value.savedVideos + videoEntities)
             }
